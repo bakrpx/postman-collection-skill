@@ -1,0 +1,32 @@
+{
+  "name": "postman-collection",
+  "owner": {
+    "name": "Ahmed Khairy Bakr",
+    "email": "bakrpx@gmail.com"
+  },
+  "metadata": {
+    "description": "Manage Postman collections for Laravel APIs: collection creation, test assertions, variable chaining, response examples, dynamic data, auth flows, Newman CI/CD, Postman cloud sync"
+  },
+  "plugins": [
+    {
+      "name": "postman-collection",
+      "source": "./postman-collection",
+      "description": "Manage Postman collections for Laravel APIs: collection creation, test assertions, variable chaining, response examples, dynamic data, auth flows, Newman CI/CD, Postman cloud sync",
+      "version": "2.0.0",
+      "author": {
+        "name": "Ahmed Khairy Bakr"
+      },
+      "category": "productivity",
+      "tags": [
+        "postman",
+        "laravel",
+        "api",
+        "api-testing",
+        "testing",
+        "newman",
+        "collection",
+        "php"
+      ]
+    }
+  ]
+}
