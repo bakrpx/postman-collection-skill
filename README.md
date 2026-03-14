@@ -1,5 +1,13 @@
 # Postman Collection Skill
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](.claude-plugin/marketplace.json)
+[![Claude Code Skill](https://img.shields.io/badge/Claude%20Code-Skill-blueviolet.svg)](https://docs.anthropic.com/en/docs/claude-code)
+[![Laravel](https://img.shields.io/badge/Laravel-FF2D20?logo=laravel&logoColor=white)](#)
+[![Postman](https://img.shields.io/badge/Postman-FF6C37?logo=postman&logoColor=white)](#)
+[![GitHub Stars](https://img.shields.io/github/stars/bakrpx/postman-collection-skill?style=flat&logo=github)](https://github.com/bakrpx/postman-collection-skill)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+
 A [Claude Code skill](https://docs.anthropic.com/en/docs/claude-code) that teaches AI agents to create, structure, test, and sync Postman collections for Laravel APIs.
 
 ## Installation
