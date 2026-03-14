@@ -13,10 +13,12 @@ This is a **Claude Code Skill** (not a Laravel/PHP package) that teaches AI agen
 ## Repository Structure
 
 ```
-postman-collection/
+skills/
 ├── SKILL.md                    # Primary skill definition (~400 line limit)
 └── references/
-    └── auth-patterns.md        # Deep-dive auth reference (JWT, Sanctum, API Keys)
+    ├── auth-patterns.md        # Deep-dive auth reference (JWT, Sanctum, API Keys)
+    ├── negative-testing.md     # Testing anti-patterns and pitfalls
+    └── variable-chaining.md    # Dynamic variable chaining across requests
 
 .claude-plugin/
 └── marketplace.json            # Skill marketplace metadata (name, version, tags)
@@ -36,7 +38,7 @@ From CONTRIBUTING.md:
 - Keep SKILL.md under 400 lines
 - One topic per reference file
 - All patterns must be generic — no project-specific data (URLs, credentials, model names)
-- Reference files go in `postman-collection/references/`
+- Reference files go in `skills/references/`
 
 ## Key Conventions
 

@@ -62,10 +62,12 @@ The skill activates automatically on relevant prompts:
 ## Skill Structure
 
 ```
-postman-collection/
+skills/
 ├── SKILL.md
 └── references/
-    └── auth-patterns.md
+    ├── auth-patterns.md
+    ├── negative-testing.md
+    └── variable-chaining.md
 ```
 
 ## Triggers

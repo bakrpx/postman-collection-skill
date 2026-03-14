@@ -10,7 +10,7 @@
   "plugins": [
     {
       "name": "postman-collection",
-      "source": "./postman-collection",
+      "source": "./skills",
       "description": "Manage Postman collections for Laravel APIs: collection creation, test assertions, variable chaining, response examples, dynamic data, auth flows, Newman CI/CD, Postman cloud sync",
       "version": "2.0.0",
       "author": {

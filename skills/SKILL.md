@@ -1,6 +1,7 @@
 ---
 name: postman-collection
 description: "Manages Postman API collections for Laravel projects including collection creation, test assertions, variable chaining, response examples, dynamic data, auth flows, Newman CI/CD, and Postman cloud sync. Use when creating or structuring Postman collections, writing test assertions, setting up variable chaining between requests, generating response examples, writing pre-request scripts, configuring Newman runs, or syncing with Postman cloud. Triggers on 'postman collection', 'newman run', 'postman tests', 'collection variables', 'response examples', 'postman auth', 'postman cloud sync', 'pre-request script', or 'postman ci'."
+tags: [laravel, php, postman, api-testing, newman]
 ---
 
 # Postman Collection Management for Laravel
