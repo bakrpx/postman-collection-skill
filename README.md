@@ -12,6 +12,15 @@ A [Claude Code skill](https://docs.anthropic.com/en/docs/claude-code) that teach
 
 ## Installation
 
+### Claude Code Marketplace
+
+```
+/plugin marketplace add bakrpx/postman-collection-skill
+/plugin install postman-collection@bakrpx
+```
+
+Or install via npm:
+
 ```bash
 npx skills add bakrpx/postman-collection-skill
 ```
@@ -39,6 +48,16 @@ This skill teaches AI agents how to:
 - **Produce** dynamic test data to prevent uniqueness violations on repeated runs
 - **Configure** Newman for CI/CD pipeline testing
 - **Sync** local collections with Postman cloud (with ID preservation)
+
+## Usage
+
+The skill activates automatically on relevant prompts:
+
+> Generate a Postman collection for my Laravel API routes
+> Add Newman to my CI/CD pipeline
+> Create test assertions for pagination responses
+> Set up Postman cloud sync with ID preservation
+> Show me auth patterns for Sanctum in Postman
 
 ## Skill Structure
 
