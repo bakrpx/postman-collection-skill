@@ -17,6 +17,8 @@
         "name": "Ahmed Khairy Bakr"
       },
       "category": "productivity",
+      "license": "MIT",
+      "repository": "https://github.com/bakrpx/postman-collection-skill",
       "tags": [
         "postman",
         "laravel",

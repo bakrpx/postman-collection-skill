@@ -107,17 +107,31 @@ pm.test('Login successful', () => {
 
 ### Sanctum Cookie-Based Auth (SPA)
 
+> **NOTE**: `pm.sendRequest` cookies are NOT available via `pm.cookies` — they must be parsed from the `Set-Cookie` response header. Skipping this step causes silent 419 errors.
+
+Pre-request script for collection or folder:
+
 ```javascript
-// Step 1: Get CSRF cookie
+// Pre-request: fetch CSRF cookie and extract token
 pm.sendRequest({
     url: pm.variables.get('base_url') + '/sanctum/csrf-cookie',
     method: 'GET',
 }, (err, res) => {
-    // Cookie is automatically stored by Postman
+    if (err) { console.error('CSRF fetch failed:', err); return; }
+    // pm.sendRequest cookies are NOT in pm.cookies — parse Set-Cookie header manually
+    const setCookie = res.headers.get('set-cookie') || '';
+    const match = setCookie.match(/XSRF-TOKEN=([^;]+)/);
+    if (match) {
+        // Laravel URL-encodes the token value
+        pm.collectionVariables.set('xsrf_token', decodeURIComponent(match[1]));
+    }
 });
 
-// Step 2: Login with credentials (cookies handled automatically)
-// The X-XSRF-TOKEN header is set from the cookie
+// In every SPA request pre-request script, inject the header:
+pm.request.headers.upsert({
+    key: 'X-XSRF-TOKEN',
+    value: pm.collectionVariables.get('xsrf_token'),
+});
 ```
 
 ## API Key Authentication

@@ -43,7 +43,7 @@ When building a collection for a Laravel API:
 
 1. **Discover routes** — Run `php artisan route:list --json` to get all registered endpoints
 2. **Map to folders** — Group routes by prefix into collection folders (e.g., `Admin API`, `Public API`)
-3. **Set defaults** — Add `Accept: application/json` and `Content-Type: application/json` headers at collection level
+3. **Set defaults** — Add `Accept: application/json` and `Content-Type: application/json` headers at collection level. **Without `Accept: application/json`, Laravel returns HTML error pages instead of JSON — this breaks all test assertions.**
 4. **Add `base_url` variable** — Define `{{base_url}}` as a collection variable, set the actual value in environment files
 5. **Build requests** — For each route, create a request with the correct method, URL pattern, headers, and sample body
 6. **Add auth** — Configure folder-level auth inheritance (see Auth Patterns section)
@@ -150,6 +150,8 @@ if (pm.response.code === 201) {
 ```
 
 Ensure collection-level variables exist for each chained value so Newman can resolve them.
+
+For error-path assertions, conditional request flows, and guard patterns to surface broken chaining, see `references/negative-testing.md`.
 
 ### Variable Scope Rules
 
@@ -259,59 +261,9 @@ Multi-layer Laravel APIs often need separate auth per layer. Key patterns:
 
 For detailed JWT acquisition, token refresh, Sanctum flows, and API key patterns, see `references/auth-patterns.md`.
 
-### Token Caching Pattern (Quick Reference)
+## Variable Chaining & Environment Management
 
-```javascript
-const expiry = parseInt(pm.collectionVariables.get('token_expiry') || '0');
-if (Date.now() / 1000 < expiry - 30) return; // Still valid
-
-pm.sendRequest({
-    url: pm.variables.get('base_url') + '/oauth/token',
-    method: 'POST',
-    header: { 'Content-Type': 'application/json' },
-    body: { mode: 'raw', raw: JSON.stringify({
-        grant_type: 'password',
-        username: pm.variables.get('auth_username'),
-        password: pm.variables.get('auth_password'),
-        client_id: pm.variables.get('client_id'),
-    })}
-}, (err, res) => {
-    if (err || res.code !== 200) return;
-    const body = res.json();
-    pm.collectionVariables.set('access_token', body.access_token);
-    pm.collectionVariables.set('token_expiry', String(Math.floor(Date.now() / 1000) + body.expires_in));
-});
-```
-
-## Path Variable Resolution
-
-For parameterized URLs like `/users/:userId`, inject pre-request scripts to resolve path variables from collection variables:
-
-```javascript
-pm.request.url.variables.upsert({
-    key: 'userId',
-    value: pm.collectionVariables.get('user_id')
-});
-```
-
-Map URL param names (camelCase) to collection variable names (snake_case). Add lookup pre-requests when a dependent resource may not exist:
-
-```javascript
-const _base = pm.variables.get('base_url');
-const _token = pm.collectionVariables.get('access_token');
-pm.sendRequest({
-    url: _base + '/api/v1/users?per_page=1',
-    method: 'GET',
-    header: { 'Accept': 'application/json', 'Authorization': 'Bearer ' + _token }
-}, (err, res) => {
-    if (!err && res.code === 200) {
-        const items = res.json().data;
-        if (Array.isArray(items) && items.length > 0) {
-            pm.collectionVariables.set('user_id', items[0].id);
-        }
-    }
-});
-```
+For parameterized URL resolution, environment file management, and data-driven testing with Newman, see `references/variable-chaining.md`.
 
 ## Newman CI/CD
 
@@ -332,7 +284,7 @@ npx newman run postman/collections/MyAPI.postman_collection.json \
 | `--delay-request <ms>` | Delay between requests (prevents rate limiting) |
 | `--timeout-request <ms>` | Per-request timeout |
 | `--bail` | Stop on first failure |
-| `-r cli,json` | Multiple output reporters |
+| `-r cli,json,htmlextra` | Multiple output reporters (requires `npm i -g newman-reporter-htmlextra`) |
 | `--reporter-json-export <file>` | Save JSON report |
 | `--folder "<name>"` | Run specific folder only |
 | `--env-var "key=value"` | Override environment variable |
@@ -356,7 +308,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - run: npm install -g newman
+      - run: npm install -g newman newman-reporter-htmlextra
       - name: Start application
         run: |
           docker compose up -d
@@ -366,13 +318,15 @@ jobs:
           newman run postman/collections/MyAPI.postman_collection.json \
               -e postman/environments/CI.postman_environment.json \
               --delay-request 100 --bail \
-              -r cli,json --reporter-json-export newman-results.json
+              -r cli,json,htmlextra --reporter-json-export newman-results.json
       - name: Upload results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: newman-results
-          path: newman-results.json
+          path: |
+            newman-results.json
+            newman/
 ```
 
 ## Postman Cloud Sync
@@ -414,6 +368,10 @@ Future uploads will match items by UUID, preventing duplicates. Store `$POSTMAN_
 | Same token for all API layers | Separate token variables per layer |
 | Manual editing in Postman cloud | Always edit locally, sync to cloud |
 | Missing response examples | Include success + error examples for documentation |
+| Not sending `Accept: application/json` | Laravel returns HTML on errors — set at collection level |
+| `POSTMAN_API_KEY` in collection variables | Inject via CI secret: `--env-var "postman_api_key=$SECRET"` |
+| `sleep` in CI to wait for app startup | Use health-check loop: `until curl -s $URL/health; do sleep 1; done` |
+| No `.example` environment template committed | Commit `*.postman_environment.json.example` with `"value": "REPLACE_ME"` placeholders |
 
 ## Laravel-Specific Patterns
 
