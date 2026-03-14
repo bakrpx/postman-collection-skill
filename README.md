@@ -19,7 +19,7 @@ A [Claude Code skill](https://docs.anthropic.com/en/docs/claude-code) that teach
 /plugin install postman-collection@bakrpx
 ```
 
-Or install via npm:
+### npm
 
 ```bash
 npx skills add bakrpx/postman-collection-skill
@@ -31,7 +31,7 @@ npx skills add bakrpx/postman-collection-skill
 php artisan boost:add-skill bakrpx/postman-collection-skill
 ```
 
-Or clone manually:
+### Manual
 
 ```bash
 git clone https://github.com/bakrpx/postman-collection-skill.git ~/.claude/skills/postman-collection-skill
